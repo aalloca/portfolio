@@ -1,0 +1,21 @@
+body {
+  background-color: black;
+}
+
+h1 {
+  color: cyan;
+  font-family: arial;
+  font-size: 300%;
+}
+
+p {
+  color: white;
+  font-family: arial;
+  font-size: 125%;
+}
+
+a {
+  color: magenta;
+  font-family: arial;
+  font-size: 100%;
+}
