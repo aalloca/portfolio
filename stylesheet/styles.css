@@ -3,19 +3,19 @@ body {
 }
 
 h1 {
-  color: red;
-  font-family: arial;
+  color: white;
+  font-family: calibri;
   font-size: 300%;
 }
 
 p {
   color: white;
-  font-family: arial;
+  font-family: calibri;
   font-size: 125%;
 }
 
 a {
-  color: magenta;
-  font-family: arial;
+  color: cyan;
+  font-family: calibri;
   font-size: 100%;
 }
