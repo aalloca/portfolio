@@ -1,54 +1,693 @@
-<html>
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-  <link rel="stylesheet" href="styles.css">
-   <link rel="stylesheet" href=".\stylesheet\styles.css"> 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alexian — Portfolio BTS SIO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b0e13;
+      --surface: #141820;
+      --border: #232b38;
+      --accent: #00e5ff;
+      --accent2: #7c3aed;
+      --text: #e8ecf4;
+      --muted: #6b7a96;
+      --green: #22d3a5;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px;
+      pointer-events: none; z-index: 1000;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid-line {
+      position: absolute; top: 0; left: 50%;
+      width: 1px; height: 100%;
+      background: linear-gradient(to bottom, transparent, var(--accent) 40%, transparent);
+      opacity: 0.3;
+    }
+
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px 60px 80px 80px;
+      position: relative;
+    }
+
+    .hero-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .hero-tag::before {
+      content: '';
+      display: inline-block; width: 32px; height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+
+    h1 span {
+      display: block;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 380px;
+      margin-bottom: 40px;
+    }
+
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 28px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .hero-cta:hover { background: var(--accent); color: var(--bg); }
+
+    .hero-right {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px 80px 80px 60px;
+    }
+
+    .stat-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+    }
+
+    .stat-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .stat-item:hover { border-color: var(--accent); }
+    .stat-item::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: linear-gradient(to bottom, var(--accent), var(--accent2));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .stat-item:hover::before { opacity: 1; }
+
+    .stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 100px 80px;
+      border-top: 1px solid var(--border);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex; align-items: center; gap: 20px;
+      margin-bottom: 60px;
+    }
+
+    .section-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .section-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
+    }
+
+    /* ── PARCOURS ── */
+    .timeline {
+      display: flex; flex-direction: column; gap: 0;
+      position: relative;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 16px; top: 8px; bottom: 8px;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+    }
+
+    .timeline-item {
+      display: flex; gap: 40px;
+      padding: 0 0 40px 50px;
+      position: relative;
+      animation: fadeUp 0.6s ease both;
+    }
+    .timeline-item:nth-child(2) { animation-delay: 0.1s; }
+    .timeline-item:nth-child(3) { animation-delay: 0.2s; }
+
+    .timeline-dot {
+      position: absolute; left: 9px; top: 6px;
+      width: 15px; height: 15px;
+      border: 2px solid var(--accent);
+      background: var(--bg);
+      border-radius: 50%;
+    }
+
+    .timeline-content {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 24px 28px;
+      flex: 1;
+      transition: border-color 0.2s;
+    }
+    .timeline-content:hover { border-color: var(--accent); }
+
+    .timeline-title {
+      font-size: 1.05rem; font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .timeline-place {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem; color: var(--muted);
+    }
+
+    /* ── STAGES ── */
+    .stage-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 36px;
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 32px;
+      transition: border-color 0.2s;
+    }
+    .stage-card:hover { border-color: var(--accent2); }
+
+    .stage-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .stage-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+    .stage-org {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem; color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .mission-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .mission-list li {
+      font-size: 0.9rem; color: var(--muted);
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .mission-list li::before {
+      content: '→';
+      color: var(--accent); flex-shrink: 0; margin-top: 1px;
+    }
+
+    /* ── PROJETS ── */
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 32px 28px;
+      position: relative; overflow: hidden;
+      transition: border-color 0.25s;
+    }
+    .project-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(to right, var(--accent), var(--accent2));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .project-card:hover { border-color: var(--accent); }
+    .project-card:hover::after { transform: scaleX(1); }
+
+    .project-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem; color: var(--accent);
+      letter-spacing: 0.1em; margin-bottom: 12px;
+    }
+    .project-name { font-size: 1.15rem; font-weight: 800; margin-bottom: 16px; }
+    .project-tasks { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .project-tasks li { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+
+    /* ── COMPÉTENCES TABLE ── */
+    .skills-table-wrapper { overflow-x: auto; }
+
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    th {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem; font-weight: 500;
+      color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      padding: 14px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    td {
+      padding: 14px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      vertical-align: middle;
+    }
+
+    tr:hover td { background: rgba(0,229,255,0.03); }
+
+    .check {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px;
+      background: rgba(0,229,255,0.12);
+      color: var(--accent); font-size: 0.8rem;
+      border-radius: 4px;
+    }
+
+    .row-header {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      padding: 20px 12px 8px;
+      background: rgba(124,58,237,0.06);
+      color: var(--accent2);
+      font-weight: 700;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .row-main td:first-child { color: var(--text); font-weight: 600; }
+
+    /* ── VEILLE & CERTIF ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 32px;
+    }
+    .info-card h3 {
+      font-size: 1rem; font-weight: 800;
+      color: var(--accent); margin-bottom: 20px;
+      font-family: 'DM Mono', monospace;
+      text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .info-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .info-list li {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.92rem;
+    }
+    .info-list li::before {
+      content: '▸';
+      color: var(--accent2); font-size: 0.75rem;
+    }
+
+    .certif-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 20px;
+      border: 1px solid var(--green);
+      color: var(--green);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.9rem; font-weight: 500;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 80px;
+      display: flex; justify-content: space-between; align-items: center;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .footer-name {
+      font-size: 0.85rem; color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
+    .footer-year {
+      font-size: 0.8rem; color: var(--border);
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-left > * { animation: fadeUp 0.7s ease both; }
+    .hero-tag    { animation-delay: 0.1s; }
+    h1           { animation-delay: 0.2s; }
+    .hero-desc   { animation-delay: 0.3s; }
+    .hero-cta    { animation-delay: 0.4s; }
+    .hero-right  { animation: fadeUp 0.7s ease 0.35s both; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-grid-line { display: none; }
+      .hero-left, .hero-right { padding: 60px 32px; }
+      .hero-right { padding-top: 0; }
+      section { padding: 70px 32px; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 12px; text-align: center; padding: 32px; }
+    }
+  </style>
 </head>
+<body>
 
-<h1>
-  Portfolio Alexian
-</h1>
+  <!-- ═══ HERO ═══ -->
+  <div class="hero">
+    <div class="hero-grid-line"></div>
 
-<p>
-  
-</p>
+    <div class="hero-left">
+      <div class="hero-tag">Portfolio · BTS SIO SISR</div>
+      <h1>
+        Bonjour,<br>
+        je suis<br>
+        <span>Alexian</span><br>
+        <a href="https://www.canva.com/design/DAGjAcSFCp0/vYtYFUzQXhNkpTDw5a7BRQ/edit?utm_content=DAGjAcSFCp0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">CV</a> 
+      </h1>
+      <p class="hero-desc">
+        Étudiant en 2<sup>e</sup> année de BTS SIO option SISR à Félix Le Dantec, Lannion. Passionné par les infrastructures réseau et les systèmes.
+      </p>
+      <a href="#parcours" class="hero-cta">
+        Découvrir mon parcours
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
 
-<a href="https://www.canva.com/design/DAGjAcSFCp0/vYtYFUzQXhNkpTDw5a7BRQ/edit?utm_content=DAGjAcSFCp0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">CV</a>
+    <div class="hero-right">
+      <div class="stat-grid">
+        <div class="stat-item">
+          <div class="stat-label">Formation</div>
+          <div class="stat-value">BTS SIO SISR</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Année</div>
+          <div class="stat-value">2<sup>e</sup> année</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Stage</div>
+          <div class="stat-value">2 × Maraîchers d'Armor</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Certification</div>
+          <div class="stat-value">PIX ✓</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<p>
-  Parcours scolaire:<br>
-  2021-2022: 2e Générale (Pavie)<br>
-  2022-2024: Bac Pro SN option RISC (Le Dantec)<br>
-  2024-2026: BTS SIO option SISR (Le Dantec)<br>
-</p>
+  <!-- ═══ PARCOURS ═══ -->
+  <section id="parcours">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Parcours</h2>
+      <div class="section-line"></div>
+    </div>
 
-<p>
-  Stages:<br>
-  1ère année: Les maraîchers d'Armor<br>
-<br>
-  2ème année: Les maraîchers d'Armor<br>
-</p>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-title">Seconde Générale</div>
+          <div class="timeline-place">Lycée de Pavie — Guingamp</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-title">Bac Pro SN — Option RISC</div>
+          <div class="timeline-place">Lycée Félix Le Dantec — Lannion</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-title">BTS SIO — Option SISR</div>
+          <div class="timeline-place">Lycée Félix Le Dantec — Lannion · En cours</div>
+        </div>
+      </div>
+    </div>
 
-<p>
-  Projets:<br>
-  <br>
-  AP Egnaro<br>
-  - Mise à disposition d'un service aux utilisateurs<br>
-<br>
-  AP Geltram<br>
-  - Répondre aux demandes d'assistance et d'évolution<br>
-  - Développer la présence en ligne de l'organisation<br>
-<br>
-  AP GSB<br>
-  - Travailler en mode projet
-</p>
+    <div style="margin-top:32px; padding: 24px 28px; background: var(--surface); border-left: 3px solid var(--accent2); border-right: 1px solid var(--border); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+      <div class="stat-label" style="margin-bottom:8px;">Pourquoi cette formation ?</div>
+      <p style="color: var(--muted); font-size: 0.95rem; line-height:1.7;">
+        Une suite logique après mon Bac Pro SN, avec l'envie d'approfondir mes compétences en systèmes et réseaux.
+      </p>
+    </div>
+  </section>
 
-<p>
-  Certification:<br>
-  Pix<br>
-</p>
+  <!-- ═══ STAGES ═══ -->
+  <section id="stages">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Stages</h2>
+      <div class="section-line"></div>
+    </div>
 
+    <div class="stage-card">
+      <div class="stage-icon">🌿</div>
+      <div>
+        <div class="stage-title">Stage 1<sup>re</sup> année</div>
+        <div class="stage-org">Les Maraîchers d'Armor</div>
+        <ul class="mission-list">
+          <li>Créer une infrastructure de test complète</li>
+        </ul>
+      </div>
+    </div>
 
+    <div class="stage-card">
+      <div class="stage-icon">🌿</div>
+      <div>
+        <div class="stage-title">Stage 2<sup>e</sup> année</div>
+        <div class="stage-org">Les Maraîchers d'Armor</div>
+        <ul class="mission-list">
+          <li>Créer une infrastructure de test complète</li>
+          <li>Trouver une solution de cartographie pour les switch de l'entreprise</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
+  <!-- ═══ PROJETS ═══ -->
+  <section id="projets">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Projets AP</h2>
+      <div class="section-line"></div>
+    </div>
 
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-year">1re ANNÉE</div>
+        <div class="project-name">Egnaro</div>
+        <ul class="project-tasks">
+          <li>Mise à disposition d'un service informatique aux utilisateurs</li>
+        </ul>
+      </div>
+      <div class="project-card">
+        <div class="project-year">1re ANNÉE</div>
+        <div class="project-name">Geltram</div>
+        <ul class="project-tasks">
+          <li>Gestion du patrimoine informatique</li>
+          <li>Répondre aux incidents et demandes d'assistance et d'évolution</li>
+        </ul>
+      </div>
+      <div class="project-card">
+        <div class="project-year">2e ANNÉE</div>
+        <div class="project-name">GSB – Galaxy Swiss Bourdin</div>
+        <ul class="project-tasks">
+          <li>Gestion du patrimoine informatique</li>
+          <li>Répondre aux incidents et demandes d'assistance</li>
+          <li>Travail en mode projet</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
+  <!-- ═══ COMPÉTENCES ═══ -->
+  <section id="competences">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Tableau de compétences</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="skills-table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Réalisation</th>
+            <th>Patrimoine<br>informatique</th>
+            <th>Incidents &amp;<br>assistance</th>
+            <th>Présence<br>en ligne</th>
+            <th>Mode<br>projet</th>
+            <th>Service<br>utilisateurs</th>
+            <th>Dév.<br>pro.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="7" class="row-header">Réalisations en cours d'année</td></tr>
+          <tr class="row-main">
+            <td>AP Egnaro</td>
+            <td></td><td></td><td></td><td></td>
+            <td><span class="check">✓</span></td>
+            <td></td>
+          </tr>
+          <tr class="row-main">
+            <td>AP Geltram</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td></td><td></td><td></td><td></td>
+          </tr>
+          <tr class="row-main">
+            <td>AP GSB</td>
+            <td></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td></td>
+          </tr>
+          <tr><td colspan="7" class="row-header">Réalisations en milieu professionnel — 1re année</td></tr>
+          <tr class="row-main">
+            <td>Infrastructure de test</td>
+            <td><span class="check">✓</span></td>
+            <td></td><td></td>
+            <td><span class="check">✓</span></td>
+            <td></td><td></td>
+          </tr>
+          <tr><td colspan="7" class="row-header">Réalisations en milieu professionnel — 2e année</td></tr>
+          <tr class="row-main">
+            <td>Infrastructure de test</td>
+            <td><span class="check">✓</span></td>
+            <td></td><td></td>
+            <td><span class="check">✓</span></td>
+            <td></td><td></td>
+          </tr>
+          <tr class="row-main">
+            <td>Solution cartographie switch</td>
+            <td></td>
+            <td><span class="check">✓</span></td>
+            <td></td><td></td><td></td><td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══ VEILLE & CERTIF ═══ -->
+  <section id="veille">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Veille &amp; Certifications</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="two-col">
+      <div class="info-card">
+        <h3>Veille informatique</h3>
+        <ul class="info-list">
+          <li>IT-Connect — actualités réseaux &amp; systèmes</li>
+          <li>Vidéos Underscore_ — culture tech &amp; sécurité</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>Certifications</h3>
+        <div style="margin-top: 4px;">
+          <div class="certif-badge">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M5 8.5l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Certification PIX
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="footer-name">Alexian · BTS SIO SISR · Lannion</div>
+    <div class="footer-year">© 2025</div>
+  </footer>
+
+</body>
 </html>
